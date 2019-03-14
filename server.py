@@ -11,11 +11,31 @@ def email_valid():
     session['title'] = 'Email Validation'
     return render_template('index.html')
 
-@app.route('/success', methods=["POST"])
+@app.route('/success', methods=["POST", "GET"])
 def success():
-    email = request.form['email']
-    print(email, '&&&&&&&&&&&&&&&&&&&&&&&&&&&')
-    session['title'] = 'Success'
+    if 'email' in request.form:
+        email = {'email':request.form['email']}
+        if not email_regex.match(email['email']):
+            flash('Invalid email address!')
+            return redirect('/')
+        session['title'] = 'Success'
+        db = connectToMySQL('dojo_emails')
+        query = 'SELECT * FROM emails WHERE email=%(email)s'
+        check_in_db = db.query_db(query, email)
+        # print(check_in_db, '&&&&&&&&&&&&&&&&&&&&&&&')
+        # print(email, '&&&&&&&&&&&&&&&&&&&&&&&')
+        if len(check_in_db) > 0:
+            email = email['email']
+            flash(f'{email} already in database')
+            return redirect('/')
+        else:
+            db = connectToMySQL('dojo_emails')
+            query = 'INSERT INTO emails (email, created_at) VALUES(%(email)s, now())'
+            db.query_db(query, email)
+    elif 'id' in request.form:
+        db = connectToMySQL('dojo_emails')
+        query = 'DELETE FROM emails WHERE id=%(id)s'
+        db.query_db(query, request.form)
     db = connectToMySQL('dojo_emails')
     query = 'SELECT * FROM emails'
     emails = db.query_db(query)
