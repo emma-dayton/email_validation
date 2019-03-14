@@ -6,3 +6,4 @@ Skills used in this assignment:
 * MySQL
 * HTML
 * Flask
+* Flask validation using the flash function
