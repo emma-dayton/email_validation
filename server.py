@@ -11,8 +11,9 @@ def email_valid():
     session['title'] = 'Email Validation'
     return render_template('index.html')
 
-@app.route('/success', methods=["POST", "GET"])
+@app.route('/success', methods=["POST"])
 def success():
+    email = None
     if 'email' in request.form:
         email = {'email':request.form['email']}
         if not email_regex.match(email['email']):
@@ -39,7 +40,7 @@ def success():
     db = connectToMySQL('dojo_emails')
     query = 'SELECT * FROM emails'
     emails = db.query_db(query)
-    return render_template('success.html', emails=emails)
+    return render_template('success.html', emails=emails, email=email)
 
 
 if __name__ == "__main__":

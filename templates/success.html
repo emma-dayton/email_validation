@@ -13,9 +13,12 @@
 		</nav>
     <div class="container-fluid" style="margin: 10px 0px 10px -15px">
       <div class="jumbotron" style="margin-right: 25px;">
-        <h4>The email address you entered is a VALID email address! Thank you!</h4>
+        <h2>The Dojo Email Database</h2>
       </div>
       <div class="card" style="margin-right: 25px;">
+        {% if email != None  %}
+          <h4>The email address you entered ({{ email['email'] }}) has been added to our database! Thank you!</h4>
+        {% endif %}
         <div class="card-header">
           <h5>Email Addresses Entered:</h5>
         <div class="card-body">
